@@ -2,12 +2,15 @@ package org.exp.incaskbot.service.impl;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.*;
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.*;
 import com.pengrad.telegrambot.response.SendResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.exp.incaskbot.model.entity.Session;
+import org.exp.incaskbot.model.enums.State;
 import org.exp.incaskbot.service.face.ButtonService;
 import org.exp.incaskbot.service.face.SessionService;
 import org.springframework.stereotype.Service;
@@ -70,18 +73,23 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendIncognitoTextMessage(Session session, String text) {
+    public void sendIncognitoTextMessage(Session session, Message message) {
         String targetUrl = session.getToMessageUrl();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
                 telegramBot.execute(
                         new SendMessage(
                                 targetChatId,
-                                text
-                        )
-                                .parseMode(ParseMode.HTML)
+
+                                "🏖️You have a new anonymous message!\n\n" +
+                                message.text()
+                                + "\n\n↩️Swipe to reply."
+
+                        ).parseMode(ParseMode.HTML)
                 );
+                sessionService.updateSessionState(session.getChatId(), State.MENU);
             } else {
                 log.warn("Target chat ID not found for URL: {}", targetUrl);
             }
