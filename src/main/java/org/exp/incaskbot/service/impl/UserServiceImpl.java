@@ -18,14 +18,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getOrCreateUser(com.pengrad.telegrambot.model.User telegramUser) {
-        Optional<User> existingUser = userRepository.findById(telegramUser.id());
-        if (existingUser.isPresent()) {
-            User dbUser = existingUser.get();
-            updateUserFields(dbUser, telegramUser);
-            return userRepository.save(dbUser);
-        } else {
-            return userRepository.save(mapToUser(telegramUser));
+        Optional<User> optionalUser = userRepository.findById(telegramUser.id());
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
         }
+        return userRepository.save(mapToUser(telegramUser));
     }
 
     public void updateUserUrl(String url) {
@@ -48,13 +45,11 @@ public class UserServiceImpl implements UserService {
                         : tgUser.firstName()
         );
         dbUser.setUsername(tgUser.username());
-        dbUser.setIsAdmin(tgUser.id().equals(6513286717L));
     }
 
     private User mapToUser(com.pengrad.telegrambot.model.User user) {
         return User.builder()
                 .id(user.id())
-                .isAdmin(user.id().equals(6513286717L))
                 .fullName(
                         user.lastName() != null && !user.lastName().isBlank()
                                 ? user.firstName() + " " + user.lastName()

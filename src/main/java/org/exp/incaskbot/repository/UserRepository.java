@@ -4,18 +4,10 @@ import jakarta.transaction.Transactional;
 import org.exp.incaskbot.model.User;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface UserRepository extends Repository<User, Long> {
-
-    Optional<User> findById(Long id);
-
-    User save(User user);
+public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Transactional
@@ -35,5 +27,11 @@ public interface UserRepository extends Repository<User, Long> {
             @Param("username") String username
     );
 
-    List<User> findAll();
+    @Modifying
+    @Query(value = "INSERT INTO user_chats(user_id, chat_payload) VALUES (:userId, :chatPayload)", nativeQuery = true)
+    void addChatToUser(@Param("userId") Long userId, @Param("chatPayload") String chatPayload);
+
+    @Query(value = "SELECT COUNT(*) > 0 FROM user_chats WHERE user_id = :userId AND chat_payload = :chatPayload", nativeQuery = true)
+    boolean existsChat(@Param("userId") Long userId, @Param("chatPayload") String chatPayload);
+
 }
