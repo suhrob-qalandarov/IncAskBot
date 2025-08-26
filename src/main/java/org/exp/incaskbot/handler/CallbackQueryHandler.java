@@ -3,7 +3,7 @@ package org.exp.incaskbot.handler;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
-import org.exp.incaskbot.model.Session;
+import org.exp.incaskbot.model.entity.Session;
 import org.exp.incaskbot.model.enums.State;
 import org.exp.incaskbot.service.face.MessageService;
 import org.exp.incaskbot.service.face.SessionService;

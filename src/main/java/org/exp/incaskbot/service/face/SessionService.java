@@ -1,6 +1,6 @@
 package org.exp.incaskbot.service.face;
 
-import org.exp.incaskbot.model.Session;
+import org.exp.incaskbot.model.entity.Session;
 import org.exp.incaskbot.model.enums.State;
 import org.springframework.stereotype.Service;
 

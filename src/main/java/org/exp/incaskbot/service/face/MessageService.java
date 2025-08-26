@@ -1,7 +1,7 @@
 package org.exp.incaskbot.service.face;
 
 import com.pengrad.telegrambot.model.*;
-import org.exp.incaskbot.model.Session;
+import org.exp.incaskbot.model.entity.Session;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,7 +1,7 @@
 package org.exp.incaskbot.repository;
 
 import jakarta.transaction.Transactional;
-import org.exp.incaskbot.model.Session;
+import org.exp.incaskbot.model.entity.Session;
 import org.exp.incaskbot.model.enums.State;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

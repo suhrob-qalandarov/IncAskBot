@@ -2,7 +2,7 @@ package org.exp.incaskbot.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.exp.incaskbot.model.User;
+import org.exp.incaskbot.model.entity.User;
 import org.exp.incaskbot.repository.UserRepository;
 import org.exp.incaskbot.service.face.UserService;
 import org.springframework.stereotype.Service;

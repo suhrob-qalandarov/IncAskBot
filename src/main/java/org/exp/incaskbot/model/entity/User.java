@@ -1,4 +1,4 @@
-package org.exp.incaskbot.model;
+package org.exp.incaskbot.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

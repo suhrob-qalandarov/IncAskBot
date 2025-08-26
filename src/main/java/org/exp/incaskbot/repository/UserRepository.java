@@ -1,7 +1,7 @@
 package org.exp.incaskbot.repository;
 
 import jakarta.transaction.Transactional;
-import org.exp.incaskbot.model.User;
+import org.exp.incaskbot.model.entity.User;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;

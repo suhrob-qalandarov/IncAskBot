@@ -7,7 +7,7 @@ import com.pengrad.telegrambot.request.*;
 import com.pengrad.telegrambot.response.SendResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.exp.incaskbot.model.Session;
+import org.exp.incaskbot.model.entity.Session;
 import org.exp.incaskbot.service.face.ButtonService;
 import org.exp.incaskbot.service.face.SessionService;
 import org.springframework.stereotype.Service;

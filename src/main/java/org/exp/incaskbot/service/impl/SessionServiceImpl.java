@@ -2,8 +2,8 @@ package org.exp.incaskbot.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.exp.incaskbot.model.Session;
-import org.exp.incaskbot.model.User;
+import org.exp.incaskbot.model.entity.Session;
+import org.exp.incaskbot.model.entity.User;
 import org.exp.incaskbot.model.enums.State;
 import org.exp.incaskbot.repository.SessionRepository;
 import org.exp.incaskbot.repository.UserRepository;

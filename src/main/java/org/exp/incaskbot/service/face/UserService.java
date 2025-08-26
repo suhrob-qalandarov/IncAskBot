@@ -1,6 +1,6 @@
 package org.exp.incaskbot.service.face;
 
-import org.exp.incaskbot.model.User;
+import org.exp.incaskbot.model.entity.User;
 import org.springframework.stereotype.Service;
 
 @Service
