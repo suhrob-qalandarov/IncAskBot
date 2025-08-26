@@ -1,9 +1,10 @@
 package org.exp.incaskbot.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,11 +18,12 @@ public class User {
     private Long id;
     private String fullName;
     private String username;
-    private String url;
 
-    private Integer lastMessageId;
-
-    private String last;
-
-    private Boolean isAdmin;
+    @ElementCollection
+    @CollectionTable(
+            name = "user_chats",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
+    @Column(name = "chat_payload")
+    private List<String> chats = new ArrayList<>();
 }
