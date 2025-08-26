@@ -16,6 +16,8 @@ import org.exp.incaskbot.service.face.SessionService;
 import org.springframework.stereotype.Service;
 import org.exp.incaskbot.service.face.MessageService;
 
+import static org.exp.incaskbot.constant.Message.getRandomEmoji;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -43,12 +45,10 @@ public class MessageServiceImpl implements MessageService {
                         .parseMode(ParseMode.HTML)
                         .disableWebPagePreview(true)
         );
-
     }
 
     @Override
     public void sendParamMenuMessage(Long chatId) {
-
         String message = """
                 🚀 Here you can send an anonymous message to the person who posted this link.
                 
@@ -82,11 +82,9 @@ public class MessageServiceImpl implements MessageService {
                 telegramBot.execute(
                         new SendMessage(
                                 targetChatId,
-
-                                "🏖️You have a new anonymous message!\n\n" +
-                                message.text()
-                                + "\n\n↩️Swipe to reply."
-
+                                getRandomEmoji() + "You have a new anonymous message!\n\n" +
+                                        (message.text() != null && !message.text().isEmpty() ? message.text() + "\n\n" : "") +
+                                        "↩️Swipe to reply."
                         ).parseMode(ParseMode.HTML)
                 );
                 sessionService.updateSessionState(session.getChatId(), State.MENU);
@@ -99,19 +97,26 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendIncognitoAudioMessage(Session session, Audio audio) {
+    public void sendIncognitoAudioMessage(Session session, Message message) {
+        if (message.audio() == null) return;
         String targetUrl = session.getToMessageUrl();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
                 telegramBot.execute(
                         new SendAudio(
                                 targetChatId,
-                                audio.fileId()
+                                message.audio().fileId()
                         )
-                                .caption("Anonim audio xabar")
+                                .caption(
+                                        getRandomEmoji() + "️You have a new anonymous message!\n\n" +
+                                                (message.caption() != null && !message.caption().isEmpty() ? message.caption() + "\n\n" : "") +
+                                                "↩️Swipe to reply."
+                                )
                                 .parseMode(ParseMode.HTML)
                 );
+                sessionService.updateSessionState(session.getChatId(), State.MENU);
             } else {
                 log.warn("Target chat ID not found for URL: {}", targetUrl);
             }
@@ -121,17 +126,25 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendIncognitoVideoMessage(Session session, Video video) {
+    public void sendIncognitoVideoMessage(Session session, Message message) {
         String targetUrl = session.getToMessageUrl();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
                 telegramBot.execute(
                         new SendVideo(
                                 targetChatId,
-                                video.fileId()
+                                message.video().fileId()
                         )
+                                .caption(
+                                        getRandomEmoji() + "You have a new anonymous message!\n\n" +
+                                                (message.caption() != null && !message.caption().isEmpty() ? message.caption() + "\n\n" : "") +
+                                                "↩️Swipe to reply."
+                                )
+                                .parseMode(ParseMode.HTML)
                 );
+                sessionService.updateSessionState(session.getChatId(), State.MENU);
             } else {
                 log.warn("Target chat ID not found for URL: {}", targetUrl);
             }
@@ -141,17 +154,20 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendIncognitoAnimationMessage(Session session, Animation animation) {
+    public void sendIncognitoAnimationMessage(Session session, Message message) {
+        Animation animation = message.animation();
         String targetUrl = session.getToMessageUrl();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
                 telegramBot.execute(
                         new SendAnimation(
                                 targetChatId,
                                 animation.fileId()
                         )
-                );
+                ); // Faqat animatsiya yuboriladi, qo'shimcha matn yo'q
+                sessionService.updateSessionState(session.getChatId(), State.MENU);
             } else {
                 log.warn("Target chat ID not found for URL: {}", targetUrl);
             }
@@ -161,17 +177,25 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendIncognitoVoiceMessage(Session session, Voice voice) {
+    public void sendIncognitoVoiceMessage(Session session, Message message) {
         String targetUrl = session.getToMessageUrl();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
                 telegramBot.execute(
                         new SendVoice(
                                 targetChatId,
-                                voice.fileId()
+                                message.voice().fileId()
                         )
+                                .caption(
+                                        getRandomEmoji() + "️You have a new anonymous message!\n\n" +
+                                                (message.caption() != null && !message.caption().isEmpty() ? message.caption() + "\n\n" : "") +
+                                                "↩️Swipe to reply."
+                                )
+                                .parseMode(ParseMode.HTML)
                 );
+                sessionService.updateSessionState(session.getChatId(), State.MENU);
             } else {
                 log.warn("Target chat ID not found for URL: {}", targetUrl);
             }
@@ -181,19 +205,26 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendIncognitoPhotoMessage(Session session, PhotoSize[] photo) {
+    public void sendIncognitoPhotoMessage(Session session, Message message) {
+        PhotoSize[] photo = message.photo();
         String targetUrl = session.getToMessageUrl();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
                 telegramBot.execute(
                         new SendPhoto(
                                 targetChatId,
                                 photo[photo.length - 1].fileId() // Eng yuqori sifatli rasm
                         )
-                                .caption("Anonim rasm xabar")
+                                .caption(
+                                        getRandomEmoji() + "You have a new anonymous message!\n\n" +
+                                                (message.caption().isEmpty() ? message.caption() + "\n\n" : "") +
+                                                "↩️Swipe to reply."
+                                )
                                 .parseMode(ParseMode.HTML)
                 );
+                sessionService.updateSessionState(session.getChatId(), State.MENU);
             } else {
                 log.warn("Target chat ID not found for URL: {}", targetUrl);
             }
@@ -203,17 +234,20 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendIncognitoVideoNoteMessage(Session session, VideoNote videoNote) {
+    public void sendIncognitoVideoNoteMessage(Session session, Message message) {
+        VideoNote videoNote = message.videoNote();
         String targetUrl = session.getToMessageUrl();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
                 telegramBot.execute(
                         new SendVideoNote(
                                 targetChatId,
                                 videoNote.fileId()
                         )
-                );
+                ); // Faqat video note yuboriladi, qo'shimcha matn yo'q
+                sessionService.updateSessionState(session.getChatId(), State.MENU);
             } else {
                 log.warn("Target chat ID not found for URL: {}", targetUrl);
             }
@@ -223,17 +257,26 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendIncognitoStickerMessage(Session session, Sticker sticker) {
+    public void sendIncognitoStickerMessage(Session session, Message message) {
+        Sticker sticker = message.sticker();
         String targetUrl = session.getToMessageUrl();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
                 telegramBot.execute(
                         new SendSticker(
                                 targetChatId,
                                 sticker.fileId()
                         )
                 );
+                /*telegramBot.execute(new SendMessage(
+                        targetChatId,
+                        """
+                                You have a new anonymous message!
+                                ↩️Swipe to reply."""
+                ));*/
+                sessionService.updateSessionState(session.getChatId(), State.MENU);
             } else {
                 log.warn("Target chat ID not found for URL: {}", targetUrl);
             }
@@ -253,11 +296,13 @@ public class MessageServiceImpl implements MessageService {
                         new SendDocument(
                                 targetChatId,
                                 message.document().fileId()
-
-                        ).caption(
-                                "🏖️You have a new anonymous message!\n\n" + message.text()
-                                + "\n\n↩️Swipe to reply."
-                        ).parseMode(ParseMode.HTML)
+                        )
+                                .caption(
+                                        getRandomEmoji() + "You have a new anonymous message!\n\n" +
+                                                (message.caption() != null && !message.caption().isEmpty() ? message.caption() + "\n\n" : "") +
+                                                "↩️Swipe to reply."
+                                )
+                                .parseMode(ParseMode.HTML)
                 );
                 sessionService.updateSessionState(session.getChatId(), State.MENU);
             } else {
@@ -272,7 +317,7 @@ public class MessageServiceImpl implements MessageService {
         telegramBot.execute(
                 new SendMessage(
                         chatId,
-                        "💎 Message sent, wait for a response!"
+                        getRandomEmoji() + "Message sent, wait for a response!"
                 ).replyToMessageId(messageId)
                         .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton("✍️Send more").callbackData("send_more_" + param)))
         );

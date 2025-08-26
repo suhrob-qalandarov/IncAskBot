@@ -30,25 +30,25 @@ public class MessageHandler implements Consumer<Message> {
                 messageService.sendIncognitoTextMessage(session, message);
 
             } else if (message.audio() != null) {
-                messageService.sendIncognitoAudioMessage(session, message.audio());
+                messageService.sendIncognitoAudioMessage(session, message);
 
             } else if (message.video() != null) {
-                messageService.sendIncognitoVideoMessage(session, message.video());
+                messageService.sendIncognitoVideoMessage(session, message);
 
             } else if (message.animation() != null) {
-                messageService.sendIncognitoAnimationMessage(session, message.animation());
+                messageService.sendIncognitoAnimationMessage(session, message);
 
             } else if (message.voice() != null) {
-                messageService.sendIncognitoVoiceMessage(session, message.voice());
+                messageService.sendIncognitoVoiceMessage(session, message);
 
             }  else if (message.photo() != null) {
-                messageService.sendIncognitoPhotoMessage(session, message.photo());
+                messageService.sendIncognitoPhotoMessage(session, message);
 
             } else if (message.videoNote() != null) {
-                messageService.sendIncognitoVideoNoteMessage(session, message.videoNote());
+                messageService.sendIncognitoVideoNoteMessage(session, message);
 
             } else if (message.sticker() != null) {
-                messageService.sendIncognitoStickerMessage(session, message.sticker());
+                messageService.sendIncognitoStickerMessage(session, message);
 
             } else if (message.document() != null) {
                 messageService.sendIncognitoDocumentMessage(session, message);
@@ -78,6 +78,9 @@ public class MessageHandler implements Consumer<Message> {
                 messageService.sendMenuMessage(session.getChatId(), session.getUrl());
                 return;
             }
-        }
+        } /*else {
+            messageService.sendMenuMessage(session.getChatId(), session.getUrl());
+            return;
+        }*/
     }
 }

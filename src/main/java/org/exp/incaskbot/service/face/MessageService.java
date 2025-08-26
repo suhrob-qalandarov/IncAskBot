@@ -10,12 +10,12 @@ public interface MessageService {
     void sendParamMenuMessage(Long chatId);
     void deleteMessage(Long chatId, Integer lastMessageId);
     void sendIncognitoTextMessage(Session session, Message text);
-    void sendIncognitoAudioMessage(Session session, Audio audio);
-    void sendIncognitoVideoMessage(Session session, Video video);
-    void sendIncognitoVoiceMessage(Session session, Voice voice);
-    void sendIncognitoPhotoMessage(Session session, PhotoSize[] photo);
-    void sendIncognitoAnimationMessage(Session session, Animation animation);
-    void sendIncognitoVideoNoteMessage(Session session, VideoNote videoNote);
-    void sendIncognitoStickerMessage(Session session, Sticker sticker);
+    void sendIncognitoAudioMessage(Session session, Message audio);
+    void sendIncognitoVideoMessage(Session session, Message video);
+    void sendIncognitoVoiceMessage(Session session, Message massage);
+    void sendIncognitoPhotoMessage(Session session, Message message);
+    void sendIncognitoAnimationMessage(Session session, Message animation);
+    void sendIncognitoVideoNoteMessage(Session session, Message videoNote);
+    void sendIncognitoStickerMessage(Session session, Message message);
     void sendIncognitoDocumentMessage(Session session, Message message);
 }
