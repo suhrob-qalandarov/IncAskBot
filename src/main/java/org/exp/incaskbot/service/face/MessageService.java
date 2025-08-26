@@ -9,7 +9,7 @@ public interface MessageService {
     void sendMenuMessage(Long chatId, String url);
     void sendParamMenuMessage(Long chatId);
     void deleteMessage(Long chatId, Integer lastMessageId);
-    void sendIncognitoTextMessage(Session session, String text);
+    void sendIncognitoTextMessage(Session session, Message text);
     void sendIncognitoAudioMessage(Session session, Audio audio);
     void sendIncognitoVideoMessage(Session session, Video video);
     void sendIncognitoVoiceMessage(Session session, Voice voice);
@@ -17,4 +17,5 @@ public interface MessageService {
     void sendIncognitoAnimationMessage(Session session, Animation animation);
     void sendIncognitoVideoNoteMessage(Session session, VideoNote videoNote);
     void sendIncognitoStickerMessage(Session session, Sticker sticker);
+    void sendIncognitoDocumentMessage(Session session, Message message);
 }

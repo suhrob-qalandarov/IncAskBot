@@ -233,4 +233,40 @@ public class MessageServiceImpl implements MessageService {
             log.warn("toMessageUrl is null for session: {}", session.getChatId());
         }
     }
+
+    @Override
+    public void sendIncognitoDocumentMessage(Session session, Message message) {
+        String targetUrl = session.getToMessageUrl();
+        if (targetUrl != null) {
+            Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
+            if (targetChatId != null) {
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
+                telegramBot.execute(
+                        new SendDocument(
+                                targetChatId,
+                                message.document().fileId()
+
+                        ).caption(
+                                "🏖️You have a new anonymous message!\n\n" + message.text()
+                                + "\n\n↩️Swipe to reply."
+                        ).parseMode(ParseMode.HTML)
+                );
+                sessionService.updateSessionState(session.getChatId(), State.MENU);
+            } else {
+                log.warn("Target chat ID not found for URL: {}", targetUrl);
+            }
+        } else {
+            log.warn("toMessageUrl is null for session: {}", session.getChatId());
+        }
+    }
+
+    private void messageSendAnswerMenu(Long chatId, Integer messageId, String param) {
+        telegramBot.execute(
+                new SendMessage(
+                        chatId,
+                        "💎 Message sent, wait for a response!"
+                ).replyToMessageId(messageId)
+                        .replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton("✍️Send more").callbackData("send_more_" + param)))
+        );
+    }
 }

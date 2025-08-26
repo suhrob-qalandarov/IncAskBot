@@ -25,8 +25,9 @@ public class MessageHandler implements Consumer<Message> {
         Session session = sessionService.getOrCreateSession(message.from());
 
         if (session.getState().equals(State.MESSAGE)) {
+            messageService.deleteMessage(session.getChatId(), session.getLastMessageId());
             if (text != null && !text.isBlank()) {
-                messageService.sendIncognitoTextMessage(session, text);
+                messageService.sendIncognitoTextMessage(session, message);
 
             } else if (message.audio() != null) {
                 messageService.sendIncognitoAudioMessage(session, message.audio());
@@ -48,12 +49,15 @@ public class MessageHandler implements Consumer<Message> {
 
             } else if (message.sticker() != null) {
                 messageService.sendIncognitoStickerMessage(session, message.sticker());
+
+            } else if (message.document() != null) {
+                messageService.sendIncognitoDocumentMessage(session, message);
             } else {
                 log.info("Unknown message={}", message);
             }
         }
 
-        if (text!=null) {
+        if (text!=null && session.getState().equals(State.MENU)) {
             if (text.startsWith("/start")) {
                 String[] parts = message.text().split(" ", 2);
                 String startParam = parts.length > 1 ? parts[1] : null;
@@ -69,6 +73,9 @@ public class MessageHandler implements Consumer<Message> {
 
             } else if (text.equals("/info")) {
                 System.out.println("info");
+                return;
+            } else {
+                messageService.sendMenuMessage(session.getChatId(), session.getUrl());
                 return;
             }
         }

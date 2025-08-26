@@ -30,7 +30,15 @@ public class CallbackQueryHandler implements Consumer<CallbackQuery> {
             messageService.sendMenuMessage(session.getChatId(), session.getUrl());
             return;
 
+        } else if (data.startsWith("send_more_")) {
+            String[] split = data.split("_");
+            String param = split[2];
+            messageService.sendParamMenuMessage(session.getChatId());
+            sessionService.updateUserSessionParam(session.getChatId(), param);
+            return;
+
         } else {
+            messageService.sendMenuMessage(session.getChatId(), session.getUrl());
             log.info("Unknown callback query data={}", data);
             return;
         }
