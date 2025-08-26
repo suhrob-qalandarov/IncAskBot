@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ButtonService {
-
     InlineKeyboardMarkup menuButtons(String payload);
-
     InlineKeyboardMarkup sendMessageButton();
 }

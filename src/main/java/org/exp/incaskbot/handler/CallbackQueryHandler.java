@@ -1,7 +1,6 @@
 package org.exp.incaskbot.handler;
 
 import com.pengrad.telegrambot.model.CallbackQuery;
-import com.pengrad.telegrambot.request.DeleteMessage;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.exp.incaskbot.model.Session;
