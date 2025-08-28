@@ -1,11 +1,13 @@
 package org.exp.incaskbot.handler;
 
+import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
+import com.pengrad.telegrambot.request.AnswerCallbackQuery;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.exp.incaskbot.model.entity.Session;
 import org.exp.incaskbot.model.enums.State;
-import org.exp.incaskbot.service.face.MessageService;
+import org.exp.incaskbot.service.face.BotMessageService;
 import org.exp.incaskbot.service.face.SessionService;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +33,16 @@ public class CallbackQueryHandler implements Consumer<CallbackQuery> {
             return;
 
         } else if (data.startsWith("send_more_")) {
-            String[] split = data.split("_");
+            /*String[] split = data.split("_");
             String param = split[2];
             messageService.sendParamMenuMessage(session.getChatId());
+            String param2 = split[3];
+            if (param2 != null) param = param + "_" + param2;*/
+            String param = data.substring(10);
+            if (param.isEmpty()) {
+                log.error("Param empty: {}", data);
+                return;
+            }
             sessionService.updateUserSessionParam(session.getChatId(), param);
             return;
 
