@@ -2,6 +2,7 @@ package org.exp.incaskbot.service.impl;
 
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import com.pengrad.telegrambot.model.request.Keyboard;
 import org.exp.incaskbot.service.face.ButtonService;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,13 @@ public class ButtonServiceImpl implements ButtonService {
     public InlineKeyboardMarkup sendMessageButton() {
         return new InlineKeyboardMarkup(
                 new InlineKeyboardButton("✖️Cancel").callbackData("delete_message_wait")
+        );
+    }
+
+    @Override
+    public Keyboard blockIncUserBtn(Long chatId) {
+        return new InlineKeyboardMarkup(
+                new InlineKeyboardButton("🚫Block").callbackData("block_inc_" + chatId)
         );
     }
 

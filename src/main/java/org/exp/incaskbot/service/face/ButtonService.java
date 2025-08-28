@@ -8,4 +8,6 @@ import org.springframework.stereotype.Service;
 public interface ButtonService {
     InlineKeyboardMarkup menuButtons(String payload);
     InlineKeyboardMarkup sendMessageButton();
+
+    Keyboard blockIncUserBtn(Long chatId);
 }
