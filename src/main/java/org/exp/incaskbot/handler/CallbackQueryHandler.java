@@ -19,7 +19,8 @@ import java.util.function.Consumer;
 public class CallbackQueryHandler implements Consumer<CallbackQuery> {
 
     private final SessionService sessionService;
-    private final MessageService messageService;
+    private final BotMessageService botMessageService;
+    private final TelegramBot telegramBot;
 
     @Override
     public void accept(CallbackQuery callbackQuery) {
@@ -27,15 +28,14 @@ public class CallbackQueryHandler implements Consumer<CallbackQuery> {
         Session session = sessionService.getOrCreateSession(callbackQuery.from());
 
         if (data.equals("delete_message_wait") && session.getState().equals(State.MESSAGE)) {
-            messageService.deleteMessage(session.getChatId(), session.getLastMessageId());
+            botMessageService.deleteMessage(session.getChatId(), session.getLastMessageId());
             sessionService.updateSessionState(session.getChatId(), State.MENU);
-            messageService.sendMenuMessage(session.getChatId(), session.getUrl());
+            botMessageService.sendMenuMessage(session.getChatId(), session.getUrl());
             return;
 
         } else if (data.startsWith("send_more_")) {
             /*String[] split = data.split("_");
             String param = split[2];
-            messageService.sendParamMenuMessage(session.getChatId());
             String param2 = split[3];
             if (param2 != null) param = param + "_" + param2;*/
             String param = data.substring(10);
@@ -43,11 +43,18 @@ public class CallbackQueryHandler implements Consumer<CallbackQuery> {
                 log.error("Param empty: {}", data);
                 return;
             }
+            botMessageService.sendParamMenuMessage(session.getChatId());
             sessionService.updateUserSessionParam(session.getChatId(), param);
             return;
 
+        } else if (data.startsWith("block_inc_")) {
+            telegramBot.execute(new AnswerCallbackQuery(callbackQuery.id())
+                    .text("⚠️ Warning: This action is not available!")
+                    .showAlert(true));
+            return;
+
         } else {
-            messageService.sendMenuMessage(session.getChatId(), session.getUrl());
+            botMessageService.sendMenuMessage(session.getChatId(), session.getUrl());
             log.info("Unknown callback query data={}", data);
             return;
         }
