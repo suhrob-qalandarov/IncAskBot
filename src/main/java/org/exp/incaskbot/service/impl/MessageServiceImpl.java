@@ -2,8 +2,10 @@ package org.exp.incaskbot.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.exp.incaskbot.model.entity.Message;
+import org.exp.incaskbot.model.entity.Session;
 import org.exp.incaskbot.repository.MessageRepository;
 import org.exp.incaskbot.service.face.MessageService;
+import org.exp.incaskbot.service.face.SessionService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,16 +13,18 @@ import org.springframework.stereotype.Service;
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
+    private final SessionService sessionService;
 
     @Override
-    public void saveMessage(Long toId, Integer messageId, Long fromId, Integer linkedMessageId, String data) {
+    public void saveMessage(Long to, Integer messageId, Long from, Integer linkedMessageId, String data) {
+        Session fromSession = sessionService.getById(from);
+        Session toSession = sessionService.getById(to);
         messageRepository.save(
                 Message.builder()
-                        .toId(toId)
+                        .from(fromSession)
+                        .to(toSession)
                         .messageId(messageId)
-                        .fromId(fromId)
                         .linkedMessageId(linkedMessageId)
-
                         .build()
         );
     }
@@ -37,6 +41,6 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message findByToIdAndMessageId(Long id, Integer integer) {
-        return messageRepository.findByToIdAndMessageId(id, integer);
+        return messageRepository.findByToChatIdAndMessageId(id, integer);
     }
 }

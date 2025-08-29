@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-    @Query(value = "SELECT from_id FROM messages WHERE message_id = :messageId", nativeQuery = true)
+    @Query(value = "SELECT from_chat_id FROM messages WHERE message_id = :messageId", nativeQuery = true)
     Long getSenderUserId(@Param("messageId") Integer messageId);
 
     Message findByMessageId(Integer messageId);
 
-    Message findByToIdAndMessageId(Long toId, Integer messageId);
+    Message findByToChatIdAndMessageId(Long toId, Integer messageId);
 }
