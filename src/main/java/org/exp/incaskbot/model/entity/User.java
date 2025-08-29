@@ -19,6 +19,13 @@ public class User {
     private String fullName;
     private String username;
 
+    @Builder.Default
+    private Integer messageCount = 0;
+    @Builder.Default
+    private Integer linkClickCount = 0;
+    @Builder.Default
+    private Integer popularity = 0;
+
     @ElementCollection
     @CollectionTable(
             name = "user_chats",
