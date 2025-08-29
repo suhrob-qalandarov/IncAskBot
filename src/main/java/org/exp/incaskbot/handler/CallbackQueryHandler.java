@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.request.AnswerCallbackQuery;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
+import org.exp.incaskbot.config.audit.TelegramContext;
 import org.exp.incaskbot.model.entity.Session;
 import org.exp.incaskbot.model.enums.State;
 import org.exp.incaskbot.service.face.BotMessageService;
@@ -24,39 +25,45 @@ public class CallbackQueryHandler implements Consumer<CallbackQuery> {
 
     @Override
     public void accept(CallbackQuery callbackQuery) {
-        String data = callbackQuery.data();
-        Session session = sessionService.getOrCreateSession(callbackQuery.from());
+        try {
+            String data = callbackQuery.data();
+            Session session = sessionService.getOrCreateSession(callbackQuery.from());
 
-        if (data.equals("delete_message_wait") && session.getState().equals(State.MESSAGE)) {
-            botMessageService.deleteMessage(session.getChatId(), session.getLastMessageId());
-            sessionService.updateSessionState(session.getChatId(), State.MENU);
-            botMessageService.sendMenuMessage(session.getChatId(), session.getUrl());
-            return;
+            if (data.equals("delete_message_wait") && session.getState().equals(State.MESSAGE)) {
+                botMessageService.deleteMessage(session.getChatId(), session.getLastMessageId());
+                sessionService.updateSessionState(session.getChatId(), State.MENU);
+                botMessageService.sendMenuMessage(session.getChatId(), session.getUrl());
+                return;
 
-        } else if (data.startsWith("send_more_")) {
+            } else if (data.startsWith("send_more_")) {
             /*String[] split = data.split("_");
             String param = split[2];
             String param2 = split[3];
             if (param2 != null) param = param + "_" + param2;*/
-            String param = data.substring(10);
-            if (param.isEmpty()) {
-                log.error("Param empty: {}", data);
+                String param = data.substring(10);
+                if (param.isEmpty()) {
+                    log.error("Param empty: {}", data);
+                    return;
+                }
+                botMessageService.sendParamMenuMessage(session.getChatId());
+                sessionService.updateUserSessionParam(session.getChatId(), param);
+                return;
+
+            } else if (data.startsWith("block_inc_")) {
+                telegramBot.execute(new AnswerCallbackQuery(callbackQuery.id())
+                        .text("⚠️ Warning: This action is not available!")
+                        .showAlert(true));
+                return;
+
+            } else {
+                botMessageService.sendMenuMessage(session.getChatId(), session.getUrl());
+                log.info("Unknown callback query data={}", data);
                 return;
             }
-            botMessageService.sendParamMenuMessage(session.getChatId());
-            sessionService.updateUserSessionParam(session.getChatId(), param);
-            return;
-
-        } else if (data.startsWith("block_inc_")) {
-            telegramBot.execute(new AnswerCallbackQuery(callbackQuery.id())
-                    .text("⚠️ Warning: This action is not available!")
-                    .showAlert(true));
-            return;
-
-        } else {
-            botMessageService.sendMenuMessage(session.getChatId(), session.getUrl());
-            log.info("Unknown callback query data={}", data);
-            return;
+        } catch (Exception e) {
+            log.error("Error processing callback query: {}", e.getMessage());
+        } finally {
+            TelegramContext.clear();
         }
     }
 }

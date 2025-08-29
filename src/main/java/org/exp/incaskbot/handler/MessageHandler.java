@@ -25,8 +25,10 @@ public class MessageHandler implements Consumer<Message> {
 
     @Override
     public void accept(Message message) {
-        String text = message.text();
-        Session session = sessionService.getOrCreateSession(message.from());
+        try {
+            String text = message.text();
+            Message replied = message.replyToMessage();
+            Session session = sessionService.getOrCreateSession(message.from());
 
         if (session.getState().equals(State.MESSAGE)) {
             messageService.deleteMessage(session.getChatId(), session.getLastMessageId());
@@ -87,5 +89,10 @@ public class MessageHandler implements Consumer<Message> {
             messageService.sendMenuMessage(session.getChatId(), session.getUrl());
             return;
         }*/
+        } catch (Exception e) {
+            log.error("Error processing message: {}", e.getMessage());
+        } finally {
+            TelegramContext.clear();
+        }
     }
 }

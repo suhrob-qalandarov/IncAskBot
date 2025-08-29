@@ -26,6 +26,11 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public Session getOrCreateSession(com.pengrad.telegrambot.model.User from) {
+
+        String userId = from != null ? from.id().toString() : "UNKNOWN";
+        TelegramContext.setCurrentUserId(userId);
+
+        assert from != null;
         Optional<Session> optionalSession = sessionRepository.findByChatId(from.id());
         if (optionalSession.isPresent()) {
             return optionalSession.get();
