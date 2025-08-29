@@ -11,4 +11,6 @@ public interface SessionService {
     void updateLastMessageId(Long chatId, Integer integer);
     void updateSessionState(Long chatId, State state);
     Long getChatIdByUrl(String targetUrl);
+
+    Session getById(Long id);
 }

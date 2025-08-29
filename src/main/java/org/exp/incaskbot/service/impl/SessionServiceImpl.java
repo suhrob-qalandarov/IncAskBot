@@ -2,6 +2,7 @@ package org.exp.incaskbot.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.exp.incaskbot.config.audit.TelegramContext;
 import org.exp.incaskbot.model.entity.Session;
 import org.exp.incaskbot.model.entity.User;
 import org.exp.incaskbot.model.enums.State;
@@ -70,6 +71,11 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public Long getChatIdByUrl(String targetUrl) {
         return sessionRepository.findChatIdByUrl(targetUrl);
+    }
+
+    @Override
+    public Session getById(Long id) {
+        return sessionRepository.findById(id).orElseThrow();
     }
 
     private String createUniqueUrl(Long userId) {
