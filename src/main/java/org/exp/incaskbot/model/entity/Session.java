@@ -2,6 +2,7 @@ package org.exp.incaskbot.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.exp.incaskbot.model.base.Auditable;
 import org.exp.incaskbot.model.enums.State;
 
 @Getter
@@ -11,8 +12,7 @@ import org.exp.incaskbot.model.enums.State;
 @AllArgsConstructor
 @Entity
 @Table(name = "sessions")
-public class Session {
-
+public class Session extends Auditable {
     @Id
     private Long chatId;
 

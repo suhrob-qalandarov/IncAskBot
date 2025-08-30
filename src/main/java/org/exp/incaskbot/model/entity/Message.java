@@ -2,6 +2,7 @@ package org.exp.incaskbot.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.exp.incaskbot.model.base.BaseEntity;
 
 import java.time.LocalDateTime;
 
@@ -12,11 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "messages")
-public class Message {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Message extends BaseEntity {
     private Integer messageId;
     private Integer linkedMessageId;
 

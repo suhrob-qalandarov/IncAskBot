@@ -2,6 +2,8 @@ package org.exp.incaskbot.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.exp.incaskbot.model.base.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "contents")
-public class Content {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Content extends BaseEntity {
+
     private String note;
 
     @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)

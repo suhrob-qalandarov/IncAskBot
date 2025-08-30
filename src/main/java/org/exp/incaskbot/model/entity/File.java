@@ -2,6 +2,7 @@ package org.exp.incaskbot.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.exp.incaskbot.model.base.BaseEntity;
 import org.exp.incaskbot.model.enums.FileType;
 
 @Getter
@@ -11,10 +12,7 @@ import org.exp.incaskbot.model.enums.FileType;
 @AllArgsConstructor
 @Entity
 @Table(name = "files")
-public class File {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class File extends BaseEntity {
     private String uniqueId;
     private String name;
     private String extension;

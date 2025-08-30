@@ -2,6 +2,7 @@ package org.exp.incaskbot.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.exp.incaskbot.model.base.Auditable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends Auditable {
     @Id
     private Long id;
     private String fullName;
