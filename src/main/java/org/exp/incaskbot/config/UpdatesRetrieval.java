@@ -2,6 +2,9 @@ package org.exp.incaskbot.config;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.request.DeleteWebhook;
+import com.pengrad.telegrambot.response.BaseResponse;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.exp.incaskbot.handler.CallbackQueryHandler;
@@ -28,5 +31,15 @@ public class UpdatesRetrieval implements CommandLineRunner {
             });
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });
+    }
+
+    @PostConstruct
+    public void deleteWebhookIfExists() {
+        BaseResponse response = telegramBot.execute(new DeleteWebhook());
+        if (response.isOk()) {
+            System.out.println("✅ Webhook deleted successfully.");
+        } else {
+            System.out.println("❌ Failed to delete webhook: " + response.description());
+        }
     }
 }
