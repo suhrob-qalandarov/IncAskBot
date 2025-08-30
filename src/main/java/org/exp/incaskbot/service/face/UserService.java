@@ -6,4 +6,12 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
     User getOrCreateUser(com.pengrad.telegrambot.model.User telegramUser);
+
+    boolean existsChat(Long chatId, String param);
+
+    void addChatToUser(Long chatId, String param);
+
+    //void updateMessageCount();
+    //void updateLinkedCount();
+    //void updatePopularity();
 }

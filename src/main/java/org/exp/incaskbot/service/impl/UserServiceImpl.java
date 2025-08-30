@@ -25,6 +25,16 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(mapToUser(telegramUser));
     }
 
+    @Override
+    public boolean existsChat(Long chatId, String param) {
+        return userRepository.existsChat(chatId, param);
+    }
+
+    @Override
+    public void addChatToUser(Long chatId, String param) {
+        userRepository.addChatToUser(chatId, param);
+    }
+
     public void updateUserUrl(String url) {
 
     }

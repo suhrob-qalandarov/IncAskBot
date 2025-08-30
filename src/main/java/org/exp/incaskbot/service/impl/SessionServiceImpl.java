@@ -53,8 +53,8 @@ public class SessionServiceImpl implements SessionService {
     @Transactional
     public void updateUserSessionParam(Long chatId, String startParam) {
         sessionRepository.updateSessionStateAndToMessageUrl(chatId, State.MESSAGE, startParam);
-        if (!userRepository.existsChat(chatId, startParam)) {
-            userRepository.addChatToUser(chatId, startParam);
+        if (!userService.existsChat(chatId, startParam)) {
+            userService.addChatToUser(chatId, startParam);
         }
     }
 
