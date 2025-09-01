@@ -43,7 +43,7 @@ public class MessageHandler implements Consumer<Message> {
 
                 if (senderMessage == null) {
                     log.error("Message mapping not found for reply messageId={}", replied.messageId());
-                    botMessageService.sendMenuMessage(session.getChatId(), session.getUrl());
+                    botMessageService.sendMenuMessage(session.getChatId(), session.getContactUri());
                     return;
                 }
 
@@ -112,7 +112,7 @@ public class MessageHandler implements Consumer<Message> {
                         sessionService.updateUserSessionParam(session.getChatId(), startParam);
                         return;
                     } else {
-                        botMessageService.sendMenuMessage(session.getChatId(), session.getUrl());
+                        botMessageService.sendMenuMessage(session.getChatId(), session.getContactUri());
                         return;
                     }
 
@@ -120,7 +120,7 @@ public class MessageHandler implements Consumer<Message> {
                     System.out.println("info");
                     return;
                 } else {
-                    botMessageService.sendMenuMessage(session.getChatId(), session.getUrl());
+                    botMessageService.sendMenuMessage(session.getChatId(), session.getContactUri());
                     return;
                 }
             } /*else {
