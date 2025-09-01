@@ -32,7 +32,7 @@ public class CallbackQueryHandler implements Consumer<CallbackQuery> {
             if (data.equals("delete_message_wait") && session.getState().equals(State.MESSAGE)) {
                 botMessageService.deleteMessage(session.getChatId(), session.getLastMessageId());
                 sessionService.updateSessionState(session.getChatId(), State.MENU);
-                botMessageService.sendMenuMessage(session.getChatId(), session.getUrl());
+                botMessageService.sendMenuMessage(session.getChatId(), session.getContactUri());
                 return;
 
             } else if (data.startsWith("send_more_")) {
@@ -56,7 +56,7 @@ public class CallbackQueryHandler implements Consumer<CallbackQuery> {
                 return;
 
             } else {
-                botMessageService.sendMenuMessage(session.getChatId(), session.getUrl());
+                botMessageService.sendMenuMessage(session.getChatId(), session.getContactUri());
                 log.info("Unknown callback query data={}", data);
                 return;
             }
