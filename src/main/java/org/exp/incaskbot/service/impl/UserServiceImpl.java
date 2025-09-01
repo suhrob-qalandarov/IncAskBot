@@ -35,6 +35,11 @@ public class UserServiceImpl implements UserService {
         userRepository.addChatToUser(chatId, param);
     }
 
+    @Override
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
     public void updateUserUrl(String url) {
 
     }
