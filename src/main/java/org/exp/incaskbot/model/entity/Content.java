@@ -2,7 +2,6 @@ package org.exp.incaskbot.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.exp.incaskbot.model.base.BaseEntity;
 
 import java.util.ArrayList;
