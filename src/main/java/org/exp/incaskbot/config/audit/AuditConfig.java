@@ -21,7 +21,7 @@ public class AuditConfig {
     public AuditorAware<String> auditorProvider() {
         return () -> {
             try {
-                String userId = telegramContext.getCurrentUserId();
+                String userId = TelegramContext.getCurrentUserId();
                 if (userId != null && !userId.isEmpty()) {
                     return Optional.of(userId);
                 }
