@@ -5,6 +5,9 @@ import lombok.*;
 import org.exp.incaskbot.model.base.Auditable;
 import org.exp.incaskbot.model.enums.State;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -17,15 +20,17 @@ public class Session extends Auditable {
     private Long chatId;
 
     private Integer lastMessageId;
-
-    @Column(unique = true, nullable = false)
-    private String url;
-
-    private String toMessageUrl;
+    private String contactUri;
     private Boolean isAdmin;
 
     @Enumerated(EnumType.STRING)
     private State state;
+
+    @OneToMany(mappedBy = "session")
+    private List<IncUri> urlList = new ArrayList<>();
+
+    @ManyToMany
+    private List<IncChat> chatList = new ArrayList<>();
 
     @OneToOne
     private User user;
