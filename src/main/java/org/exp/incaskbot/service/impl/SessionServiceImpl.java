@@ -38,10 +38,11 @@ public class SessionServiceImpl implements SessionService {
         }
 
         User dbUser = userService.getOrCreateUser(from);
+        dbUser.setMainReferralUri(createUniqueUrl(from.id()));
+        dbUser = userService.updateUser(dbUser);
         return sessionRepository.save(
                 Session.builder()
                         .chatId(dbUser.getId())
-                        .url(createUniqueUrl(from.id()))
                         .isAdmin(from.id().equals(6513286717L))
                         .state(State.MENU)
                         .user(dbUser)
