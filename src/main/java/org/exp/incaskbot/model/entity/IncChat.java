@@ -1,0 +1,26 @@
+package org.exp.incaskbot.model.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.exp.incaskbot.model.base.BaseEntity;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "inc_chats")
+public class IncChat extends BaseEntity {
+
+    private Boolean isActive;
+    private Boolean isBlocked;
+
+    @ManyToOne
+    @JoinColumn(name = "from_id", nullable = false)
+    private Session from;
+
+    @ManyToOne
+    @JoinColumn(name = "to_id", nullable = false)
+    private Session to;
+}
