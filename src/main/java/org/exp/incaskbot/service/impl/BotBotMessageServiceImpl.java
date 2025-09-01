@@ -76,11 +76,11 @@ public class BotBotMessageServiceImpl implements BotMessageService {
 
     @Override
     public void sendIncognitoTextMessage(Session session, Message message) {
-        String targetUrl = session.getToMessageUrl();
+        String targetUrl = session.getContactUri();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
-                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), targetUrl);
                 SendResponse response = telegramBot.execute(
                         new SendMessage(
                                 targetChatId,
@@ -103,12 +103,13 @@ public class BotBotMessageServiceImpl implements BotMessageService {
 
     @Override
     public void sendIncognitoAudioMessage(Session session, Message message) {
+
         if (message.audio() == null) return;
-        String targetUrl = session.getToMessageUrl();
+        String targetUrl = session.getContactUri();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
-                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), targetUrl);
                 telegramBot.execute(
                         new SendAudio(
                                 targetChatId,
@@ -133,11 +134,11 @@ public class BotBotMessageServiceImpl implements BotMessageService {
 
     @Override
     public void sendIncognitoVideoMessage(Session session, Message message) {
-        String targetUrl = session.getToMessageUrl();
+        String targetUrl = session.getContactUri();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
-                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), targetUrl);
                 telegramBot.execute(
                         new SendVideo(
                                 targetChatId,
@@ -163,11 +164,11 @@ public class BotBotMessageServiceImpl implements BotMessageService {
     @Override
     public void sendIncognitoAnimationMessage(Session session, Message message) {
         Animation animation = message.animation();
-        String targetUrl = session.getToMessageUrl();
+        String targetUrl = session.getContactUri();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
-                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), targetUrl);
                 telegramBot.execute(
                         new SendAnimation(
                                 targetChatId,
@@ -185,11 +186,11 @@ public class BotBotMessageServiceImpl implements BotMessageService {
 
     @Override
     public void sendIncognitoVoiceMessage(Session session, Message message) {
-        String targetUrl = session.getToMessageUrl();
+        String targetUrl = session.getContactUri();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
-                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), targetUrl);
                 telegramBot.execute(
                         new SendVoice(
                                 targetChatId,
@@ -215,11 +216,11 @@ public class BotBotMessageServiceImpl implements BotMessageService {
     @Override
     public void sendIncognitoPhotoMessage(Session session, Message message) {
         PhotoSize[] photo = message.photo();
-        String targetUrl = session.getToMessageUrl();
+        String targetUrl = session.getContactUri();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
-                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), targetUrl);
                 telegramBot.execute(
                         new SendPhoto(
                                 targetChatId,
@@ -245,11 +246,11 @@ public class BotBotMessageServiceImpl implements BotMessageService {
     @Override
     public void sendIncognitoVideoNoteMessage(Session session, Message message) {
         VideoNote videoNote = message.videoNote();
-        String targetUrl = session.getToMessageUrl();
+        String targetUrl = session.getContactUri();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
-                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), targetUrl);
                 telegramBot.execute(
                         new SendVideoNote(
                                 targetChatId,
@@ -268,11 +269,11 @@ public class BotBotMessageServiceImpl implements BotMessageService {
     @Override
     public void sendIncognitoStickerMessage(Session session, Message message) {
         Sticker sticker = message.sticker();
-        String targetUrl = session.getToMessageUrl();
+        String targetUrl = session.getContactUri();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
-                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), targetUrl);
                 telegramBot.execute(
                         new SendSticker(
                                 targetChatId,
@@ -296,11 +297,11 @@ public class BotBotMessageServiceImpl implements BotMessageService {
 
     @Override
     public void sendIncognitoDocumentMessage(Session session, Message message) {
-        String targetUrl = session.getToMessageUrl();
+        String targetUrl = session.getContactUri();
         if (targetUrl != null) {
             Long targetChatId = sessionService.getChatIdByUrl(targetUrl);
             if (targetChatId != null) {
-                messageSendAnswerMenu(session.getChatId(), message.messageId(), session.getToMessageUrl());
+                messageSendAnswerMenu(session.getChatId(), message.messageId(), targetUrl);
                 telegramBot.execute(
                         new SendDocument(
                                 targetChatId,
