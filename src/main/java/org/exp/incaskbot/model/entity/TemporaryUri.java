@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "inc_uris")
-public class IncUri extends BaseEntity {
+@Table(name = "temporary_uris")
+public class TemporaryUri extends BaseEntity {
 
     @Column(unique = true)
     private String temporaryReferralUri;
