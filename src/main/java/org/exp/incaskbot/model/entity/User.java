@@ -26,9 +26,6 @@ public class User extends Auditable {
     @OneToOne
     private UserStatistics statistics;
 
-    @Column(name = "main_referral_uri", unique = true, nullable = false)
-    private String mainReferralUri;
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<TemporaryUri> urlList = new ArrayList<>();
+    private List<IncognitoUri> urlList = new ArrayList<>();
 }
