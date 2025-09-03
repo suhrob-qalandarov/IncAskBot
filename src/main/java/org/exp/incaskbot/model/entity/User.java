@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.exp.incaskbot.model.base.Auditable;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,21 +21,14 @@ public class User extends Auditable {
     private String username;
     private Boolean hasPremium;
 
+    private long coin;
+
+    @OneToOne
+    private UserStatistics statistics;
+
     @Column(name = "main_referral_uri", unique = true, nullable = false)
     private String mainReferralUri;
 
-    private int messageCount;
-    private int linkClickCount;
-    private int popularity;
-
-    private int dailyMessageCount;
-    private int dailyLinkClickCount;
-    private int dailyPopularity;
-
-    private long coin;
-
-    @Builder.Default
-    private LocalDateTime lastModifiedDailyDate = LocalDateTime.now();
-
-    private List<IncChat> chats = new ArrayList<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<TemporaryUri> urlList = new ArrayList<>();
 }

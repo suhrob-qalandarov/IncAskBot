@@ -22,6 +22,7 @@ public class TemporaryUri extends BaseEntity {
 
     private LocalDateTime expiresAt;
 
-    /*@ManyToOne
-    private Session session;*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }
