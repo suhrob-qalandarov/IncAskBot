@@ -2,12 +2,11 @@ package org.exp.incaskbot.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.exp.incaskbot.model.base.Auditable;
 import org.exp.incaskbot.model.enums.State;
+import org.exp.incaskbot.model.base.Auditable;
 
-import java.util.ArrayList;
 import java.util.List;
-
+import java.util.ArrayList;
 @Getter
 @Setter
 @Builder
@@ -25,9 +24,6 @@ public class Session extends Auditable {
 
     @Enumerated(EnumType.STRING)
     private State state;
-
-    @OneToMany(mappedBy = "session")
-    private List<IncUri> urlList = new ArrayList<>();
 
     @ManyToMany
     private List<IncChat> chatList = new ArrayList<>();
