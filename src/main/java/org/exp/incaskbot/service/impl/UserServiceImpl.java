@@ -1,12 +1,18 @@
 package org.exp.incaskbot.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.exp.incaskbot.model.entity.IncognitoUri;
 import org.exp.incaskbot.model.entity.User;
+import org.exp.incaskbot.model.enums.UriType;
 import org.exp.incaskbot.repository.UserRepository;
 import org.exp.incaskbot.service.face.UserService;
 import org.springframework.stereotype.Service;
 
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Optional;
 
 @Slf4j
@@ -17,12 +23,20 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public User getOrCreateUser(com.pengrad.telegrambot.model.User telegramUser) {
         Optional<User> optionalUser = userRepository.findById(telegramUser.id());
-        if (optionalUser.isPresent()) {
-            return optionalUser.get();
-        }
-        return userRepository.save(mapToUser(telegramUser));
+        if (optionalUser.isPresent()) return optionalUser.get();
+
+        User newUser = mapToUser(telegramUser);
+        User savedUser = userRepository.save(newUser);
+        savedUser.getUrlList().add(
+                IncognitoUri.builder()
+                        .user(newUser)
+                        .uri(createUniqueUrl(telegramUser.id()))
+                        .type(UriType.MAIN)
+                        .build());
+        return userRepository.save(savedUser);
     }
 
     @Override
@@ -60,6 +74,17 @@ public class UserServiceImpl implements UserService {
                         : tgUser.firstName()
         );
         dbUser.setUsername(tgUser.username());
+    }
+
+    private String createUniqueUrl(Long userId) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            byte[] hash = digest.digest(String.valueOf(userId).getBytes());
+            return Base64.getUrlEncoder().withoutPadding()
+                    .encodeToString(Arrays.copyOf(hash, 6));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private User mapToUser(com.pengrad.telegrambot.model.User user) {

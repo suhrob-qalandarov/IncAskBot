@@ -7,14 +7,10 @@ import org.exp.incaskbot.model.entity.Session;
 import org.exp.incaskbot.model.entity.User;
 import org.exp.incaskbot.model.enums.State;
 import org.exp.incaskbot.repository.SessionRepository;
-import org.exp.incaskbot.repository.UserRepository;
 import org.exp.incaskbot.service.face.SessionService;
 import org.exp.incaskbot.service.face.UserService;
 import org.springframework.stereotype.Service;
 
-import java.security.MessageDigest;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -23,7 +19,6 @@ public class SessionServiceImpl implements SessionService {
 
     private final UserService userService;
     private final SessionRepository sessionRepository;
-    private final UserRepository userRepository;
 
     @Override
     public Session getOrCreateSession(com.pengrad.telegrambot.model.User from) {
@@ -38,7 +33,6 @@ public class SessionServiceImpl implements SessionService {
         }
 
         User dbUser = userService.getOrCreateUser(from);
-        dbUser.setMainReferralUri(createUniqueUrl(from.id()));
         dbUser = userService.updateUser(dbUser);
         return sessionRepository.save(
                 Session.builder()
@@ -77,17 +71,6 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public Session getById(Long id) {
         return sessionRepository.findById(id).orElseThrow();
-    }
-
-    private String createUniqueUrl(Long userId) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            byte[] hash = digest.digest(String.valueOf(userId).getBytes());
-            return Base64.getUrlEncoder().withoutPadding()
-                    .encodeToString(Arrays.copyOf(hash, 6));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }
