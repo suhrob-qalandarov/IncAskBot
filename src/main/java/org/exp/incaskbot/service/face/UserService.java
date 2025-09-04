@@ -12,8 +12,4 @@ public interface UserService {
     void addChatToUser(Long chatId, String param);
 
     User updateUser(User user);
-
-    //void updateMessageCount();
-    //void updateLinkedCount();
-    //void updatePopularity();
 }
