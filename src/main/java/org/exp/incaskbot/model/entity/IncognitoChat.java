@@ -3,6 +3,7 @@ package org.exp.incaskbot.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.exp.incaskbot.model.base.BaseEntity;
+import org.exp.incaskbot.model.enums.IncChatStatus;
 
 @Getter
 @Setter
@@ -11,10 +12,10 @@ import org.exp.incaskbot.model.base.BaseEntity;
 @AllArgsConstructor
 @Entity
 @Table(name = "inc_chats")
-public class IncChat extends BaseEntity {
+public class IncognitoChat extends BaseEntity {
 
-    private Boolean isActive;
-    private Boolean isBlocked;
+    @Enumerated(EnumType.STRING)
+    private IncChatStatus status;
 
     @ManyToOne
     @JoinColumn(name = "from_id", nullable = false)
@@ -23,4 +24,7 @@ public class IncChat extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "to_id", nullable = false)
     private Session to;
+
+    @OneToOne
+    private Message message;
 }
