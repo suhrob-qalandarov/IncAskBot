@@ -26,7 +26,7 @@ public class Session extends Auditable {
     private State state;
 
     @ManyToMany
-    private List<IncChat> chatList = new ArrayList<>();
+    private List<IncognitoChat> chatList = new ArrayList<>();
 
     @OneToOne
     private User user;
